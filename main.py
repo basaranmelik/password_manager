@@ -29,6 +29,56 @@ def generate_password():
     password_entry.insert(END, password)
     pyperclip.copy(password)
 
+
+def search():
+    website = website_entry.get()
+    try:
+        with open("data.json", "r") as file:
+            searching_data = json.load(file)
+        if website in searching_data:
+            email = searching_data[website]["email"]
+            password = searching_data[website]["password"]
+            messagebox.showinfo(title=website,
+                                message=f"E-Mail: {email}\nPassword: {password}")
+        else:
+            messagebox.showinfo("Error", "Password Not Found")
+    except FileNotFoundError:
+        with open("data.json", "w") as file:
+            json.dump({}, file)
+            messagebox.showinfo("Error", "Password Not Found")
+
+
+# ---------------------------- SAVE PASSWORD ------------------------------- #
+def save():
+    website = website_entry.get()
+    email = email_entry.get()
+    password = password_entry.get()
+    new_data = {
+        website: {
+            "email": email,
+            "password": password
+        }
+    }
+
+    if len(website) == 0 or len(password) == 0:
+        messagebox.showinfo(title="Oops", message="Please make sure you haven't left any fields empty.")
+    else:
+        try:
+            with open("data.json", "r") as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            with open("data.json", "w") as file:
+                json.dump(new_data, file, indent=4)
+        else:
+            data.update(new_data)
+            with open("data.json", "w") as file:
+                json.dump(data, file, indent=4)
+        finally:
+            website_entry.delete(0, END)
+            password_entry.delete(0, END)
+            website_entry.focus()
+
+
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
 window.title("Password Manager")
