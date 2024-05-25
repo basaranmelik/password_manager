@@ -10,6 +10,25 @@ letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
 numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 symbols = ['!', '#', '$', '%', '&', '(', ')', '*', '+']
 
+
+# ---------------------------- PASSWORD GENERATOR ------------------------------- #
+def generate_password():
+    password_entry.delete(0, END)
+    nr_letters = random.randint(8, 10)
+    nr_symbols = random.randint(2, 4)
+    nr_numbers = random.randint(2, 4)
+    password_list = []
+    for char in range(nr_letters):
+        password_list.append(random.choice(letters))
+    for char in range(nr_symbols):
+        password_list.append(random.choice(symbols))
+    for char in range(nr_numbers):
+        password_list.append(random.choice(numbers))
+    random.shuffle(password_list)
+    password = "".join(password_list)
+    password_entry.insert(END, password)
+    pyperclip.copy(password)
+
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
 window.title("Password Manager")
@@ -43,7 +62,7 @@ generate_password_button = Button(text="Generate Password", width=14)
 generate_password_button.grid(row=3, column=2)
 generate_search_button = Button(text="Search", width=14)
 generate_search_button.grid(row=1, column=2)
-add_button = Button(text="Add", width=36,)
+add_button = Button(text="Add", width=36, )
 add_button.grid(row=4, column=1, columnspan=2)
 
 window.mainloop()
